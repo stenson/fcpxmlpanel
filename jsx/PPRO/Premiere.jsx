@@ -1835,7 +1835,7 @@ $._PPP_={
 	},
 
 	registerProjectChangedFxn: function () {
-		app.bind('onProjectChanged', $._PPP_.myOnProjectChanged);
+		app.bind('onProjectChanged', $._PPP_.persistTimelineToJSON);
 	},
 
 	confirmPProHostVersion: function () {
@@ -1902,7 +1902,7 @@ $._PPP_={
 		}
 	},
 
-	myActiveSequenceChangedFxn: function () {
+	persistTimelineToJSON: function () {
 		var seq = app.project.activeSequence;
 		if (seq) {
 			var currentSeqSettings = app.project.activeSequence.getSettings();
@@ -1948,16 +1948,29 @@ $._PPP_={
 				projPath.close();
 				outFile.close();
 				
-				$._PPP_.updateEventPanel("Updated");
+				//$._PPP_.updateEventPanel("Updated");
 			}
 		}
 	},
 
-	mySequenceActivatedFxn: function () {
-		$._PPP_.updateEventPanel("Active sequence is now " + app.project.activeSequence.name + ".");
+	refreshImageBasedMedia: function () {
+		var seq = app.project.activeSequence;
+		if (seq) {
+			var tracks = seq.videoTracks;
+			for (var ti = 0; ti < tracks.numTracks; ti++) {
+				var track = tracks[ti];
+				if (track.clips.numTracks > 0) {
+					var pi = track.clips[0].projectItem;
+					if (pi) {
+						var mp = pi.getMediaPath();
+						pi.changeMediaPath(mp, false);
+					}
+				}
+			}
+		}
 	},
 
-	myActiveSequenceSelectionChangedFxn: function () {
+	registerActiveSequenceChangedFxn: function () {
 		var sel = app.project.activeSequence.getSelection();
 		$._PPP_.updateEventPanel(sel.length + ' track items selected in ' + app.project.activeSequence.name + '.');
 		for (var i = 0; i < sel.length; i++) {
@@ -1971,24 +1984,25 @@ $._PPP_={
 		$._PPP_.updateEventPanel('Something in  ' + app.project.activeSequence.name + 'changed.');
 	},
 	
-	registerActiveSequenceStructureChangedFxn: function () {
+	registerActiveSequenceChangedFxn: function () {
 		//var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceStructureChangedFxn);
-		var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceChangedFxn);
+		//var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceChangedFxn);
 	},
 
-	registerActiveSequenceChangedFxn: function () {
-		var success	=	app.bind("onActiveSequenceChanged", $._PPP_.myActiveSequenceChangedFxn);
+	//registerSequenceSelectionChangedFxn: function () {
+		//var success	=	app.bind("onActiveSequenceChanged", $._PPP_.persistTimelineToJSON);
 		//var success = app.bind("MZ::Scripting::kOnActiveSequenceChanged", $._PPP_.myActiveSequenceChangedFxn);
-	},
+	//},
 
 	registerSequenceSelectionChangedFxn: function () {
-		//var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.myActiveSequenceSelectionChangedFxn);
-		var success = app.bind("onActiveSequenceSelectionChanged", $._PPP_.myActiveSequenceChangedFxn);
+		var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.refreshImageBasedMedia);
+		//var success = app.bind("onActiveSequenceSelectionChanged", $._PPP_.myActiveSequenceChangedFxn);
 	},
 
 	registerSequenceActivatedFxn: function () {
+		var success	=	app.bind("onSequenceActivated", $._PPP_.persistTimelineToJSON);
 		//var success = app.bind('onSequenceActivated', $._PPP_.mySequenceActivatedFxn);
-		var success = app.bind('onSequenceActivated', $._PPP_.myActiveSequenceChangedFxn);
+		//var success = app.bind('onSequenceActivated', $._PPP_.myActiveSequenceChangedFxn);
 	},
 	
 	enableNewWorldScripting: function () {
