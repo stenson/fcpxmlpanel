@@ -239,7 +239,7 @@ $._PPP_={
 	exportFCPXML: function () {
 		if (app.project.activeSequence) {
 			var projPath = new File(app.project.path);
-			var parentDir = projPath.parent;
+			var parentDir = projPath.parent.parent;
 			var outputName = app.project.activeSequence.name;
 			var xmlExtension = '.xml';
 			//var outputPath = Folder.selectDialog("Choose the output directory");
@@ -1903,7 +1903,54 @@ $._PPP_={
 	},
 
 	myActiveSequenceChangedFxn: function () {
-		$._PPP_.updateEventPanel(app.project.activeSequence.name + " changed, somehow.");
+		var seq = app.project.activeSequence;
+		if (seq) {
+			var currentSeqSettings = app.project.activeSequence.getSettings();
+			if (currentSeqSettings) {
+				var ip = seq.getInPointAsTime();
+				var op = seq.getOutPointAsTime();
+				var fps = currentSeqSettings.videoFrameRate;
+				var duration = seq.end;
+
+				var projPath = new File(app.project.path);
+				var parentDir = projPath.parent.parent;
+				var outputName = app.project.activeSequence.name;
+				var jsonExtension = '.json';
+				var completeOutputPath = parentDir.fsName + $._PPP_.getSep() + outputName + jsonExtension;
+				var outFile = new File(completeOutputPath);
+				outFile.encoding = "UTF8";
+				outFile.open("w", "TEXT", "????");
+
+				var data = {};
+				data.metadata = { "inPoint": ip.seconds, "outPoint": op.seconds, "duration": duration, "timebase": seq.timebase, "frameRate": fps.seconds };
+				
+				data.storyboard = [];
+
+				var markers = seq.markers;
+				if (markers) {
+					var markerCount = markers.numMarkers;
+					if (markerCount) {
+						for (var thisMarker = markers.getFirstMarker(); thisMarker !== undefined; thisMarker = markers.getNextMarker(thisMarker)) {
+							data.storyboard.push({ name: thisMarker.name, start: thisMarker.start.seconds, end: thisMarker.end.seconds});
+						}
+					}
+				}
+
+				var track = seq.videoTracks[1];
+				data.tracks = [{clips:[]}, {clips:[]}];
+				for (var ci = 0; ci < track.clips.numTracks; ci++) {
+					var clip = track.clips[ci];
+					data.tracks[1].clips.push({ name: clip.name, start: clip.inPoint.seconds, end: clip.outPoint.seconds});
+				}
+
+				outFile.writeln(JSON.stringify(data, null, 2));
+
+				projPath.close();
+				outFile.close();
+				
+				$._PPP_.updateEventPanel("Updated");
+			}
+		}
 	},
 
 	mySequenceActivatedFxn: function () {
@@ -1925,7 +1972,8 @@ $._PPP_={
 	},
 	
 	registerActiveSequenceStructureChangedFxn: function () {
-		var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceStructureChangedFxn);
+		//var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceStructureChangedFxn);
+		var success	=	app.bind("onActiveSequenceStructureChanged", $._PPP_.myActiveSequenceChangedFxn);
 	},
 
 	registerActiveSequenceChangedFxn: function () {
@@ -1934,11 +1982,13 @@ $._PPP_={
 	},
 
 	registerSequenceSelectionChangedFxn: function () {
-		var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.myActiveSequenceSelectionChangedFxn);
+		//var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.myActiveSequenceSelectionChangedFxn);
+		var success = app.bind("onActiveSequenceSelectionChanged", $._PPP_.myActiveSequenceChangedFxn);
 	},
 
 	registerSequenceActivatedFxn: function () {
-		var success = app.bind('onSequenceActivated', $._PPP_.mySequenceActivatedFxn);
+		//var success = app.bind('onSequenceActivated', $._PPP_.mySequenceActivatedFxn);
+		var success = app.bind('onSequenceActivated', $._PPP_.myActiveSequenceChangedFxn);
 	},
 	
 	enableNewWorldScripting: function () {

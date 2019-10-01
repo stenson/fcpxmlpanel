@@ -17,10 +17,10 @@ function onLoaded() {
 	csInterface.evalScript('$._PPP_.keepPanelLoaded()');
 	//csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');					// Project changed
 	//csInterface.evalScript('$._PPP_.registerSequenceSelectionChangedFxn()');		// Selection within the active sequence changed
-	//csInterface.evalScript('$._PPP_.registerSequenceActivatedFxn()');				// The active sequence changed
+	csInterface.evalScript('$._PPP_.registerSequenceActivatedFxn()');				// The active sequence changed
 	//csInterface.evalScript('$._PPP_.registerActiveSequenceStructureChangedFxn()');	// Clips within the active sequence changed
 	//csInterface.evalScript('$._PPP_.registerSequenceMessaging()');			
-	csInterface.evalScript('$._PPP_.registerActiveSequenceChangedFxn()');
+	//csInterface.evalScript('$._PPP_.registerActiveSequenceChangedFxn()');
 }
 
 /**
