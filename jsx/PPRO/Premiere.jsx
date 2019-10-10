@@ -85,6 +85,7 @@ $._PPP_={
 	},
 
 	persistTimelineToJSON: function () {
+		return;
 		var seq = app.project.activeSequence;
 		if (seq) {
 			var currentSeqSettings = app.project.activeSequence.getSettings();
@@ -163,7 +164,7 @@ $._PPP_={
 	},
 
 	refreshImageBasedMedia: function () {
-		//return;
+		return;
 		var seq = app.project.activeSequence;
 		if (seq) {
 			var tracks = seq.videoTracks;

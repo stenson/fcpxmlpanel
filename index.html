@@ -10,8 +10,6 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$("#btn_PPRO6").on("click", function() {
-				// onClick="evalScript('$._PPP_.exportFCPXML()')"
-				//alert(evalScript);
 				evalScript('$._PPP_.exportFCPXML()');
 			});
 		});
@@ -19,7 +17,7 @@
 </head>
 <body onLoad="onLoaded()" style="background:#222">
 	<a href="javascript:history.go(0)">Refresh</a>
-	<button id="btn_PPRO6">Export FCP XML</button>&nbsp;<input type="text" value="where-to"/>
+	<!--<button id="btn_PPRO6">Export FCP XML</button>&nbsp;<input type="text" value="where-to"/>-->
 </body>
 <script>
 	document.body.onbeforeunload = function () {
