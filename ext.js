@@ -2,8 +2,7 @@
 function onLoaded() {
 	var csInterface = new CSInterface();
 	var locale	 	= csInterface.hostEnvironment.appUILocale;
-	
-	loadJSX();
+	var appName = loadJSX();
 
 	// // register for messages
 	// VulcanInterface.addMessageListener(
@@ -14,10 +13,18 @@ function onLoaded() {
 	//     }
 	// );
 
-	//csInterface.evalScript('$._PPP_.keepPanelLoaded()');
-	//csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');
+	csInterface.evalScript('$._generic_ = {}');
 
-	alert("DONE INITIALIZING");
+	if (appName == "PPRO") {
+		csInterface.evalScript('$._PPP_.keepPanelLoaded()');
+		csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');
+		csInterface.evalScript('$._generic_.refreshAnimations = $._PPP_.refreshAnimations');
+	}
+
+	if (appName == "AEFT") {
+		csInterface.evalScript('$._AE_.keepPanelLoaded()');
+		csInterface.evalScript('$._generic_.refreshAnimations = $._AE_.refreshAnimations');
+	}
 }
 
 /**
@@ -39,7 +46,7 @@ function loadJSX() {
 	var extensionRootApp = extensionPath + '/jsx/' + appName + '/';
 	csInterface.evalScript('$._ext.evalFiles("' + extensionRootApp + '")');
 
-	alert("DONE LOADING");
+	return appName;
 }
 
 function evalScript(script, callback) {

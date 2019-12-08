@@ -98,7 +98,7 @@ $._PPP_={
 			}
 		}
 	},
-	refreshImageBasedMedia: function(root, prefix, fps) {
+	refreshAnimations: function(root, prefix, fps) {
         //alert(app.project.rootItem.children);
         if (!root) {
             root = app.project.rootItem;
@@ -117,7 +117,7 @@ $._PPP_={
                 //currentItem.refreshMedia();
 			}
         }
-        $._PPP_.updateEventPanel("refreshed >>> " + updatedItems.join("/"));
+        //$._PPP_.updateEventPanel("refreshed >>> " + updatedItems.join("/"));
 	},
 	registerProjectChangedFxn: function () {
 		var success	= app.bind("onProjectChanged", $._PPP_.persistTimelineToJSON);

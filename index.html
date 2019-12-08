@@ -53,7 +53,7 @@
 				if (data["rendered"]) {
 					var prefix = data["prefix"];
 					var csInterface = new CSInterface();
-					csInterface.evalScript('$._PPP_.refreshImageBasedMedia(null, "'+data['prefix']+'", '+data['fps']+')');
+					csInterface.evalScript('$._generic_.refreshAnimations(null, "'+data['prefix']+'", '+data['fps']+')');
 				}
 			} catch(e) {
 				// nothing to do
@@ -73,7 +73,11 @@
 		}
 	}
 
-	//var csInterface = new CSInterface();
-	//csInterface.evalScript('$._PPP_.refreshImageBasedMedia(null, "test_animation", 23.976)');
+	if (true) {
+		setTimeout(function() {
+			var csInterface = new CSInterface();
+			csInterface.evalScript('$._generic_.refreshAnimations(null, "test_animation", 23.976)');
+		}, 1000);
+	}
 </script>
 </html>
