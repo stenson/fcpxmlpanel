@@ -16,7 +16,7 @@ function onLoaded() {
 
 	csInterface.evalScript('$._PPP_.keepPanelLoaded()');
 	csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');
-	csInterface.evalScript('$._PPP_.registerSequenceSelectionChangedFxn()');
+	//csInterface.evalScript('$._PPP_.registerSequenceSelectionChangedFxn()');
 }
 
 /**

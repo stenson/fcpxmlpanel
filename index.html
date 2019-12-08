@@ -23,5 +23,61 @@
 	document.body.onbeforeunload = function () {
 		
 	};
+
+	connectToWebsocket();
+
+	var connected = false;
+
+	function connectToWebsocket() {
+		if (connected) {
+			return;
+		}
+		const WS_URL = "ws://localhost:8007"
+		var websocket = new WebSocket(WS_URL);
+		websocket.onopen = function (evt) { onOpen(evt) };
+		websocket.onclose = function (evt) { onClose(evt) };
+		websocket.onmessage = function (evt) { onMessage(evt) };
+		websocket.onerror = function (evt) { onError(evt) };
+
+		function onOpen(evt) {
+			//console.log("connected\n");
+			connected = true;
+		}
+
+		function onClose(evt) {
+			//console.log("disconnected\n");
+			connected = false;
+		}
+
+		function onMessage(evt) {
+			try {
+				var data = JSON.parse(evt.data);
+				if (data["rendered"]) {
+					var prefix = data["prefix"];
+					var csInterface = new CSInterface();
+					csInterface.evalScript('$._PPP_.refreshImageBasedMedia(null, "'+data['prefix']+'", '+data['fps']+')');
+				}
+			} catch(e) {
+				// nothing to do
+			}
+		}
+
+		function onError(evt) {
+			//console.log('error: ' + evt.data + '\n');
+			//websocket.close();
+		}
+
+		function doSend(message) {
+			//console.log("sent: " + message + '\n');
+			websocket.send(message);
+		}
+
+		function doDisconnect() {
+			websocket.close();
+		}
+	}
+
+	//var csInterface = new CSInterface();
+	//csInterface.evalScript('$._PPP_.refreshImageBasedMedia(null, "test_animation", 23.976)');
 </script>
 </html>

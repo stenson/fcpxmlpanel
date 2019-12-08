@@ -102,7 +102,7 @@
 //                  ? "Date(" + this[key] + ")"
 //                  : value;
 //          });
-//          // text is '["Date(---current time---)"]'
+//          // text is '["Date(---cur   t time---)"]'
 
 //      JSON.parse(text, reviver)
 //          This method parses a JSON text to produce an object or array.
@@ -696,9 +696,29 @@ $._PPP_={
 		}
 	},
 
-	refreshImageBasedMedia: function () {
-		return;
-		var seq = app.project.activeSequence;
+	refreshImageBasedMedia: function(root, prefix, fps) {
+        //alert(app.project.rootItem.children);
+        if (!root) {
+            root = app.project.rootItem;
+        }
+        var updatedItems = [];
+        var numItems = root.children.numItems;
+		for (var i = 0; i < numItems; i++) {
+			var currentItem = root.children[i];
+			if (currentItem) {
+                if (currentItem.name.match(prefix) && currentItem.name.match(/\.png$/)) {
+                    //alert(currentItem.name);
+                    currentItem.refreshMedia();
+                    updatedItems.push(currentItem.name);
+                    //pi.changeMediaPath(mp, false);
+                }
+                //currentItem.refreshMedia();
+			}
+        }
+        $._PPP_.updateEventPanel("refreshed >>> " + updatedItems.join("/"));
+        
+        return;
+        var seq = app.project.activeSequence;
 		if (seq) {
 			var tracks = seq.videoTracks;
 			for (var ti = 1; ti < tracks.numTracks; ti++) {
@@ -707,8 +727,9 @@ $._PPP_={
 					var pi = track.clips[0].projectItem;
 					if (pi) {
 						var mp = pi.getMediaPath();
-						if (pi.name.match(/\.png$/)) {
-							pi.changeMediaPath(mp, false);
+						if (pi.name.match(prefix), pi.name.match(/\.png$/)) {
+                            alert("YES TRUE");
+							//pi.changeMediaPath(mp, false);
 						}
 						//$._PPP_.updateEventPanel(">>>"+mp);
 						//
@@ -719,7 +740,7 @@ $._PPP_={
 	},
 
 	registerSequenceSelectionChangedFxn: function () {
-		var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.refreshImageBasedMedia);
+		//var success = app.bind('onActiveSequenceSelectionChanged', $._PPP_.refreshImageBasedMedia);
 	},
 
 	registerProjectChangedFxn: function () {
