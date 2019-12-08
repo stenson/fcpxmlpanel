@@ -5,18 +5,19 @@ function onLoaded() {
 	
 	loadJSX();
 
-	// register for messages
-	VulcanInterface.addMessageListener(
-	    VulcanMessage.TYPE_PREFIX + "com.DVA.message.sendtext",
-	    function(message) {
-	        var str = VulcanInterface.getPayload(message);
-	        // You just received the text of every Text layer in the current AE comp.
-	    }
-	);
+	// // register for messages
+	// VulcanInterface.addMessageListener(
+	//     VulcanMessage.TYPE_PREFIX + "com.DVA.message.sendtext",
+	//     function(message) {
+	//         var str = VulcanInterface.getPayload(message);
+	//         // You just received the text of every Text layer in the current AE comp.
+	//     }
+	// );
 
-	csInterface.evalScript('$._PPP_.keepPanelLoaded()');
-	csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');
-	//csInterface.evalScript('$._PPP_.registerSequenceSelectionChangedFxn()');
+	//csInterface.evalScript('$._PPP_.keepPanelLoaded()');
+	//csInterface.evalScript('$._PPP_.registerProjectChangedFxn()');
+
+	alert("DONE INITIALIZING");
 }
 
 /**
@@ -37,6 +38,8 @@ function loadJSX() {
 	// load JSX scripts based on appName
 	var extensionRootApp = extensionPath + '/jsx/' + appName + '/';
 	csInterface.evalScript('$._ext.evalFiles("' + extensionRootApp + '")');
+
+	alert("DONE LOADING");
 }
 
 function evalScript(script, callback) {

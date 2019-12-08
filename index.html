@@ -40,12 +40,10 @@
 		websocket.onerror = function (evt) { onError(evt) };
 
 		function onOpen(evt) {
-			//console.log("connected\n");
 			connected = true;
 		}
 
 		function onClose(evt) {
-			//console.log("disconnected\n");
 			connected = false;
 		}
 
@@ -63,12 +61,10 @@
 		}
 
 		function onError(evt) {
-			//console.log('error: ' + evt.data + '\n');
-			//websocket.close();
+			websocket.close();
 		}
 
 		function doSend(message) {
-			//console.log("sent: " + message + '\n');
 			websocket.send(message);
 		}
 
