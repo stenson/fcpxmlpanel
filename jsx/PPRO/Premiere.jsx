@@ -1,6 +1,3 @@
-#include "PPro_API_Constants.jsx"
-#include "Premiere_JSON.jsx"
-
 $._PPP_={
 	keepPanelLoaded: function () {
 		app.setExtensionPersistent("com.robstenson.FCPXMLPanel", 0); // 0, while testing (to enable rapid reload); 1 for "Never unload me, even when not visible."

@@ -33,6 +33,7 @@ function onLoaded() {
 */
 function loadJSX() {
 	var csInterface = new CSInterface();
+	alert("HELLO");
 
 	// get the appName of the currently used app. For Premiere Pro it's "PPRO"
 	var appName = csInterface.hostEnvironment.appName;
